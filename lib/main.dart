@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:centre_alliance_sport_sante/Services/Auth/AuthService.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +19,9 @@ import 'Repository/Auth/AuthRepository.dart';
 //Import View Models
 import 'ViewModels/Auth/AuthViewModel.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(App());
 }
 
@@ -30,13 +34,15 @@ class _AppState extends State<App> {
   // Cache Gestion : Only for Authentification at moment
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late AppRouterDelegate delegate;
+  late AuthService authService;
   late AuthRepository authRepository;
 
   @override
   void initState() {
     super.initState();
     // Initialize auth state by cache
-    authRepository = AuthRepository(SharedPreferences.getInstance());
+    authService = AuthService();
+    authRepository = AuthRepository(SharedPreferences.getInstance(), authService);
     // Set application first page showed on auth condition
     delegate = AppRouterDelegate(authRepository);
   }

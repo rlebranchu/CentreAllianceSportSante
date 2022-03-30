@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myfirstflutterapp">
+    package="com.rlebranchu.centre_alliance_sport_sante">
    <application
-        android:label="myfirstflutterapp"
+        android:label="centre_alliance_sport_sante"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

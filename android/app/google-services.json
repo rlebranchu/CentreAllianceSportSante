@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "606763393920",
+    "project_id": "centre-alliance-sport-sante",
+    "storage_bucket": "centre-alliance-sport-sante.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606763393920:android:8d24bc91923310aa8b1765",
+        "android_client_info": {
+          "package_name": "com.rlebranchu.centre_alliance_sport_sante"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "606763393920-n8rj87c84aj08kae3d2c1qsp8c76tvms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcbRzf8J3zio1XSw836gNjgdVp0txyGII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "606763393920-n8rj87c84aj08kae3d2c1qsp8c76tvms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

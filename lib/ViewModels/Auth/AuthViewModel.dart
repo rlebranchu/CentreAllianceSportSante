@@ -10,12 +10,11 @@ class AuthViewModel extends ChangeNotifier {
 
   // Basic auth function without check of input and generation of token
   // [Idea for future dev] : Check if account exist in database (Firebase)
-  Future<bool> login() async {
-    logingIn = true;
+  Future<bool> login(String email, String password) async {
     // Notify Providers : logingOut starting
     notifyListeners();
-    final result = await authRepository!.login();
-    logingIn = false;
+    final result = await authRepository!.login(email, password);
+    logingIn = result;
     // Notify Providers : logingIn ending
     notifyListeners();
     return result;

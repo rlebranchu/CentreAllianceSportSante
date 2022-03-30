@@ -35,6 +35,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  onSignOutPressed() async {
+    final authViewModel = context.read<AuthViewModel>();
+    final result = await authViewModel.logout();
+    if (result == true) {
+      widget.onLogout();
+    } else {
+      authViewModel.logingIn = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ElevatedButton(
-                    onPressed: () async {
-                      final authViewModel = context.read<AuthViewModel>();
-                      final result = await authViewModel.login();
-                      if (result == true) {
-                        widget.onLogout();
-                      } else {
-                        authViewModel.logingIn = false;
-                      }
-                    },
+                    onPressed: onSignOutPressed,
                     child: const Text('SE DÉCONNECTER')),
               ),
             ],

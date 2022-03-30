@@ -32,8 +32,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // Initialisation of state values (just to skip input of login informations)
-  String _username = 'robin.lebranchu@gmail.com';
-  String _password = 'password';
+  String _email = '';
+  String _password = '';
 
   // Context use later for Loading Dialog
   late BuildContext loginDialogContext;
@@ -83,6 +83,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  onSignInPressed() async {
+    // Ask to show Dialog
+    showLoaderDialog(context);
+    final authViewModel = context.read<AuthViewModel>();
+    final result = await authViewModel.login(_email,_password);
+    // Hide Dialog of loading
+    Navigator.pop(loginDialogContext);
+    if (result == true) {
+      widget.onLogin();
+    } else {
+      authViewModel.logingIn = false;
+    }
+  }
+
   // Definition of the Login page
   @override
   Widget build(BuildContext context) {
@@ -106,9 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         TextFormField(
-                          initialValue: _username,
+                          initialValue: _email,
                           onChanged: (text) {
-                            setState(() => _username = text);
+                            setState(() => _email = text);
                           },
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.person),
@@ -132,32 +146,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
                           child: ElevatedButton(
-                            onPressed: () async {
-                              // Ask to show Dialog
-                              showLoaderDialog(context);
-                              final authViewModel =
-                                  context.read<AuthViewModel>();
-                              final result = await authViewModel.login();
-                              // Hide Dialog of loading
-                              Navigator.pop(loginDialogContext);
-                              if (result == true) {
-                                widget.onLogin();
-                              } else {
-                                authViewModel.logingIn = false;
-                              }
-                            },
+                            onPressed: onSignInPressed,
                             child: const Text('SE CONNECTER'),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-                    // [Idea for future dev] : Generate a link for other Page to create an account
-                    child: Text(
-                      'Pas de compte ? Inscrivez-vous !',
-                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                 ],
