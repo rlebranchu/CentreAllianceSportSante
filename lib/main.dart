@@ -1,8 +1,12 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import 'package:centre_alliance_sport_sante/Services/Auth/AuthService.dart';
+import 'package:centre_alliance_sport_sante/Controllers/AuthController.dart';
+import 'package:centre_alliance_sport_sante/Controllers/HomeController.dart';
+import 'package:centre_alliance_sport_sante/Repository/HomeRepository.dart';
+import 'package:centre_alliance_sport_sante/Services/AuthService.dart';
+import 'package:centre_alliance_sport_sante/Services/UserService.dart';
+import 'package:centre_alliance_sport_sante/Utility/SharedPreferencesUtility.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +18,7 @@ import 'Configuration/Router/AppRouterDelegate.dart';
 import 'Configuration/Theme/AppTheme.dart';
 
 //Import Repositories
-import 'Repository/Auth/AuthRepository.dart';
-
-//Import View Models
-import 'ViewModels/Auth/AuthViewModel.dart';
+import 'Repository/AuthRepository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,19 +33,27 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   // Cache Gestion : Only for Authentification at moment
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late AppRouterDelegate delegate;
+  late SharedPreferencesUtility preferencesUtility;
   late AuthService authService;
+  late UserService userService;
   late AuthRepository authRepository;
+  late HomeRepository homeRepository;
 
   @override
   void initState() {
     super.initState();
+    //Initialize SharedPreferences
+    preferencesUtility = SharedPreferencesUtility(preferences: SharedPreferences.getInstance());
+    //Initialize User Service
+    userService = UserService();
     // Initialize auth state by cache
     authService = AuthService();
-    authRepository = AuthRepository(SharedPreferences.getInstance(), authService);
+    authRepository = AuthRepository(preferencesUtility, authService, userService);
+    homeRepository = HomeRepository(preferencesUtility);
+
     // Set application first page showed on auth condition
-    delegate = AppRouterDelegate(authRepository);
+    delegate = AppRouterDelegate(authRepository, homeRepository);
   }
 
   @override
@@ -52,8 +61,11 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         // Provider on evolution of auth state to change page ([Idea for futur dev] and deconnection by expired token)
-        ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(authRepository),
+        ChangeNotifierProvider<AuthController>(
+          create: (_) => AuthController(authRepository),
+        ),
+        ChangeNotifierProvider<HomeController>(
+          create: (_) => HomeController(homeRepository),
         ),
       ],
       // Genaral App : use Material

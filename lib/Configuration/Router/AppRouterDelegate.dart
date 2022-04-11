@@ -1,10 +1,11 @@
+import 'package:centre_alliance_sport_sante/Repository/HomeRepository.dart';
 import 'package:flutter/material.dart';
 
 // Import Configuration
 import 'AppConfiguration.dart';
 
 // Import Repositories
-import '../../Repository/Auth/AuthRepository.dart';
+import '../../Repository/AuthRepository.dart';
 
 // Import Pages
 import '../../View/Pages/Splash/SplashPage.dart';
@@ -15,6 +16,7 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppConfiguration> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final AuthRepository authRepository;
+  final HomeRepository homeRepository;
 
   // Initialisation of Router State
   _init() async {
@@ -24,12 +26,14 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  AppRouterDelegate(this.authRepository) {
+  AppRouterDelegate(this.authRepository, this.homeRepository) {
     _init();
   }
 
   bool? _loggedIn;
+
   bool? get loggedIn => _loggedIn;
+
   set loggedIn(value) {
     _loggedIn = value;
     // Notify providers for each modifications of log state
@@ -102,12 +106,9 @@ class AppRouterDelegate extends RouterDelegate<AppConfiguration>
           onLogout: () async {
             loggedIn = false;
           },
+          username: 'Robin Lebranchu' //homeRepository.getUserName()
         ),
       ];
-
-  // Function use when logout
-  // but not use now because nothing is needed to clear currently
-  _clear() {}
 
   @override
   Future<void> setNewRoutePath(AppConfiguration configuration) async {}

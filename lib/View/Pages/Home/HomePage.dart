@@ -1,16 +1,18 @@
+import 'package:centre_alliance_sport_sante/View/Widgets/SessionListItem.dart';
+import 'package:centre_alliance_sport_sante/View/Widgets/TitleSection.dart';
+import 'package:centre_alliance_sport_sante/Controllers/AuthController.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-// Import ViewModel
-import '../../../ViewModels/Auth/AuthViewModel.dart';
 
 class HomePage extends Page {
   // Function use on Logout's button
   final VoidCallback onLogout;
+  final String username;
 
   // onLogout : REQUIRED -> Function executed when the button Logout is pressed
   const HomePage({
     required this.onLogout,
+    required this.username
   }) : super(key: const ValueKey('HomePage'));
 
   @override
@@ -18,30 +20,30 @@ class HomePage extends Page {
     // Creation of the Route which show the Home Page
     return MaterialPageRoute(
       settings: this,
-      builder: (BuildContext context) => HomeScreen(onLogout: onLogout),
+      builder: (BuildContext context) => HomeScreen(onLogout: onLogout, username: username),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback onLogout;
+  final String username;
 
-  const HomeScreen({Key? key, required this.onLogout}) : super(key: key);
+  const HomeScreen({Key? key, required this.onLogout, required this.username}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
 
   onSignOutPressed() async {
-    final authViewModel = context.read<AuthViewModel>();
-    final result = await authViewModel.logout();
+    final authController = context.read<AuthController>();
+    final result = await authController.logout();
     if (result == true) {
       widget.onLogout();
     } else {
-      authViewModel.logingIn = false;
+      authController.logingIn = true;
     }
   }
 
@@ -49,29 +51,34 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CENTRE ALLIANCE SPORT SANTÉ'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
-                child: Image.asset('assets/images/CASS_Logo.png'),
-              ),
-              Text('HOME PAGE', style: Theme.of(context).textTheme.headline1),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: ElevatedButton(
-                    onPressed: onSignOutPressed,
-                    child: const Text('SE DÉCONNECTER')),
-              ),
-            ],
+        title: const Text('CENTRE ALLIANCE SPORT SANTE'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: onSignOutPressed,
           ),
-        ),
+        ],
       ),
-      // Navigation Bar for change Screen show (only show in HomePage = Log confirmed)
-      bottomNavigationBar: BottomNavigationBar(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(children: <Widget>[
+            Text('Bienvenue', style: Theme.of(context).textTheme.headline1),
+            Text(widget.username, style: Theme.of(context).textTheme.headline2),
+            TitleSection(title: 'Mes prochaines séances'),
+            Container(
+              height: 80.0,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                separatorBuilder: (context, index) => SizedBox(width: 10.0),
+                itemCount: 8,
+                itemBuilder: (context, index) => SessionListItem(),
+              ),
+            ),
+          ]),
+        ),
+      ), // Navigation Bar for change Screen show (only show in HomePage = Log confirmed)
+      /*bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         showSelectedLabels: true,
         showUnselectedLabels: false,
@@ -109,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
         },
-      ),
+      ),*/
     );
   }
 }

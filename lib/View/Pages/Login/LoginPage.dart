@@ -1,15 +1,15 @@
+import 'package:centre_alliance_sport_sante/Controllers/AuthController.dart';
+import 'package:centre_alliance_sport_sante/View/Widgets/TextFormFieldApp.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-// Import ViewModel
-import '../../../ViewModels/Auth/AuthViewModel.dart';
 
 class LoginPage extends Page {
   // Function use on Login's button
   final VoidCallback onLogin;
 
   // onLogin : REQUIRED -> Function executed when the button Login is pressed
-  const LoginPage({required this.onLogin}) : super(key: const ValueKey('LoginPage'));
+  const LoginPage({required this.onLogin})
+      : super(key: const ValueKey('LoginPage'));
 
   @override
   Route createRoute(BuildContext context) {
@@ -45,16 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(10),
       child: Stack(
-        overflow: Overflow.visible,
         alignment: Alignment.center,
         children: <Widget>[
           Container(
             width: double.infinity,
             height: 175,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white
-            ),
+                borderRadius: BorderRadius.circular(15), color: Colors.white),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
@@ -86,14 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
   onSignInPressed() async {
     // Ask to show Dialog
     showLoaderDialog(context);
-    final authViewModel = context.read<AuthViewModel>();
-    final result = await authViewModel.login(_email,_password);
+    final authController = context.read<AuthController>();
+    final result = await authController.login(_email, _password);
     // Hide Dialog of loading
     Navigator.pop(loginDialogContext);
     if (result == true) {
       widget.onLogin();
     } else {
-      authViewModel.logingIn = false;
+      authController.logingIn = false;
     }
   }
 
@@ -119,32 +116,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        TextFormField(
-                          initialValue: _email,
-                          onChanged: (text) {
-                            setState(() => _email = text);
-                          },
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            labelText: 'Identifiant',
-                          ),
-                        ),
+                        TextFormFieldApp(
+                            label: 'Identifiant',
+                            onChange: (text) {
+                              setState(() => _email = text);
+                            },
+                            initialValue: _email,
+                            icon: Icons.person),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-                          child: TextFormField(
-                              initialValue: _password,
-                              onChanged: (text) {
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+                          child: TextFormFieldApp(
+                              label: 'Mot de passe',
+                              onChange: (text) {
                                 setState(() => _password = text);
                               },
-                              decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.lock),
-                                labelText: 'Mot de Passe',
-                              ),
+                              initialValue: _password,
+                              icon: Icons.lock,
                               obscureText: true,
                               enableSuggestions: false),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
                           child: ElevatedButton(
                             onPressed: onSignInPressed,
                             child: const Text('SE CONNECTER'),
