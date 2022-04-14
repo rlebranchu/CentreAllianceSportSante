@@ -29,6 +29,13 @@
             {
               "client_id": "606763393920-n8rj87c84aj08kae3d2c1qsp8c76tvms.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "606763393920-6vhoe3eej5l32a1l6rh6r7a8s2ehlan3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rlebranchu.centreAllianceSportSante"
+              }
             }
           ]
         }
