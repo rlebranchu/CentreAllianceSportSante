@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:centre_alliance_sport_sante/bloc_observer.dart';
-import 'package:centre_alliance_sport_sante/blocs/app/app_bloc.dart';
+import 'package:centre_alliance_sport_sante/blocs/blocs.dart';
 import 'package:centre_alliance_sport_sante/config/app_theme.dart';
 import 'package:centre_alliance_sport_sante/config/routes.dart';
 import 'package:centre_alliance_sport_sante/firebase_options.dart';
@@ -19,8 +19,7 @@ Future<void> main() {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    final AuthenticationRepository authenticationRepository =
-        AuthenticationRepository();
+    final authenticationRepository = AuthenticationRepository();
     runApp(App(authenticationRepository: authenticationRepository));
   }, blocObserver: AppBlocObserver());
 }
@@ -36,11 +35,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-        value: _authenticationRepository,
-        child: BlocProvider(
-            create: (_) =>
-                AppBloc(authenticationRepository: _authenticationRepository),
-            child: const AppView()));
+      value: _authenticationRepository,
+      child: BlocProvider(
+        create: (_) =>
+            AppBloc(authenticationRepository: _authenticationRepository),
+        child: const AppView(),
+      ),
+    );
   }
 }
 
