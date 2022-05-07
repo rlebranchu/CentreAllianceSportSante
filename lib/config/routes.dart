@@ -1,15 +1,15 @@
-import 'package:centre_alliance_sport_sante/blocs/app/app_bloc.dart';
+import 'package:centre_alliance_sport_sante/blocs/authentication/authentication_bloc.dart';
 import 'package:centre_alliance_sport_sante/views/views.dart';
 import 'package:flutter/material.dart';
 
 List<Page> onGenerateAppViewPages(
-  AppStatus state,
+  AuthenticationStatus state,
   List<Page<dynamic>> pages,
 ) {
   switch (state) {
-    case AppStatus.authenticated:
+    case AuthenticationStatus.authenticated:
       return [HomeView.page()];
-    case AppStatus.unauthenticated:
+    case AuthenticationStatus.unauthenticated:
       return [LoginView.page()];
   }
 }

@@ -30,6 +30,7 @@ class AppTheme {
             color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         headline6: TextStyle(
             color: Colors.red, fontSize: 15.0, fontWeight: FontWeight.bold),
+        bodyText1: TextStyle(fontSize: 14.0),
         bodyText2: TextStyle(color: PRIMARYCOLOR, fontSize: 14.0),
       ),
       inputDecorationTheme: InputDecorationTheme(

@@ -43,6 +43,7 @@ dependencies:
   meta: ^1.7.0
   flutterfire_ui: ^0.4.0+2
   flow_builder: ^0.0.6
+  shimmer_animation: ^2.1.0+1
 
 dev_dependencies:
   bloc_test: ^9.0.0

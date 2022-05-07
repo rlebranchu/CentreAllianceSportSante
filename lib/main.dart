@@ -8,6 +8,7 @@ import 'package:centre_alliance_sport_sante/config/app_theme.dart';
 import 'package:centre_alliance_sport_sante/config/routes.dart';
 import 'package:centre_alliance_sport_sante/firebase_options.dart';
 import 'package:centre_alliance_sport_sante/repositories/authentication_repository.dart';
+import 'package:centre_alliance_sport_sante/repositories/repositories.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,20 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: _authenticationRepository,
-      child: BlocProvider(
-        create: (_) =>
-            AppBloc(authenticationRepository: _authenticationRepository),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (_) => AuthenticationBloc(
+              authenticationRepository: AuthenticationRepository(),
+            ),
+          ),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(
+              authenticationBloc: context.read<AuthenticationBloc>(),
+              sessionRepository: SessionRepository(),
+            ),
+          ),
+        ],
         child: const AppView(),
       ),
     );
@@ -54,7 +66,7 @@ class AppView extends StatelessWidget {
       theme: AppTheme().Theme,
       title: 'Center Alliance Sport',
       home: FlowBuilder(
-          state: context.select((AppBloc bloc) => bloc.state.status),
+          state: context.select((AuthenticationBloc bloc) => bloc.state.status),
           onGeneratePages: onGenerateAppViewPages),
     );
   }
