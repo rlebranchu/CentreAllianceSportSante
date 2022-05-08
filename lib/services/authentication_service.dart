@@ -1,17 +1,22 @@
 import 'package:centre_alliance_sport_sante/models/models.dart';
+import 'package:centre_alliance_sport_sante/services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class AuthenticationService {
   final firebase_auth.FirebaseAuth _firebaseAuth;
-
-  AuthenticationService({firebase_auth.FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  final UserService _userService;
 
   User currentUser = User.empty;
 
-  Stream<User> get user {
-    return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
+  AuthenticationService({firebase_auth.FirebaseAuth? firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+        _userService = UserService();
+
+  Stream<Future<User>> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) async {
+      final user = firebaseUser == null
+          ? User.empty
+          : await _userService.getUserById(firebaseUser.uid);
       currentUser = user;
       return user;
     });

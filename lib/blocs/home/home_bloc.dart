@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadListSession>(_onLoadListSession);
 
     _userSubscription = _authenticationBloc.stream.listen(
-      (state) => add(LoadListSession(User.empty)),
+      (state) => add(LoadListSession(state.user)),
     );
   }
 
@@ -31,8 +31,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       LoadListSession event, Emitter<HomeState> emit) async {
     emit(const HomeLoaded.startSearchListSession());
     late final List<Session> listSession;
-    listSession = await _sessionRepository.getListSessionsOfUser(
-        userId: 'IHj18QWRAodq1ubuOw5D9Yj1Bf13');
+    listSession =
+        await _sessionRepository.getListSessionsOfUser(userId: event.user.id);
     emit(HomeLoaded.setListSession(listSession));
   }
 

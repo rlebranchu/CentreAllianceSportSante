@@ -7,7 +7,7 @@ class SessionService {
   Future<List<Session>> getListSessionsOfUser(String userId) async {
     final snapshot = await firestore
         .collection('sessions')
-        .where('userId', isEqualTo: 'userId')
+        .where('userId', isEqualTo: userId)
         .get();
     return snapshot.docs
         .map((doc) => Session.fromFirestore(doc.id, doc.data()))

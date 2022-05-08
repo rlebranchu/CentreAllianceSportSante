@@ -4,9 +4,11 @@ import 'package:centre_alliance_sport_sante/services/services.dart';
 class AuthenticationRepository {
   final AuthenticationService _authenticationService = AuthenticationService();
 
-  User currentUser = User.empty;
+  User get currentUser {
+    return _authenticationService.currentUser;
+  }
 
-  Stream<User> get user {
+  Stream<Future<User>> get user {
     return _authenticationService.user;
   }
 

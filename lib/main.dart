@@ -46,7 +46,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider<HomeBloc>(
             create: (context) => HomeBloc(
-              authenticationBloc: context.read<AuthenticationBloc>(),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               sessionRepository: SessionRepository(),
             ),
           ),

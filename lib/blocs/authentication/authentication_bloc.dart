@@ -11,7 +11,7 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
-  StreamSubscription<User>? _userSubscription;
+  StreamSubscription<Future<User>>? _userSubscription;
 
   AuthenticationBloc(
       {required AuthenticationRepository authenticationRepository})
@@ -24,7 +24,7 @@ class AuthenticationBloc
     on<AuthenticationLogoutRequested>(_onLogoutRequested);
 
     _userSubscription = _authenticationRepository.user.listen(
-      (user) => add(AuthenticationUserChanged(user)),
+      (user) async => add(AuthenticationUserChanged(await user)),
     );
   }
 
